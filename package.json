@@ -1,0 +1,41 @@
+{
+  "name": "@kud/sim-crafter-cli",
+  "version": "0.9.0",
+  "description": "A CLI tool to manage iOS simulators on macOS, simplifying testing and development workflows.",
+  "main": "index.js",
+  "bin": {
+    "sim-crafter": "./index.js"
+  },
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kud/sim-crafter-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kud/sim-crafter-cli/issues"
+  },
+  "homepage": "https://github.com/kud/sim-crafter-cli#readme",
+  "author": "Erwann Mest <m@kud.io>",
+  "license": "MIT",
+  "dependencies": {
+    "@inquirer/select": "2.2.0",
+    "chalk": "5.3.0",
+    "cli-table3": "0.6.3",
+    "inquirer": "9.2.16",
+    "yargs": "17.7.2",
+    "zx": "7.2.3"
+  },
+  "keywords": [
+    "ios",
+    "simulator",
+    "cli-tool",
+    "development-tools",
+    "ios-simulator",
+    "simctl",
+    "ios-development",
+    "apple-development"
+  ]
+}
