@@ -15,7 +15,7 @@ Sim Crafter is a command-line interface tool designed to streamline the manageme
 Sim Crafter can be installed through npm. To add it to your project, run the following command:
 
 ```bash
-npm install @kud/sim-crafter-cli
+npm install -g @kud/sim-crafter-cli
 ```
 
 Make sure you have Node.js installed on your system to use Sim Crafter.
