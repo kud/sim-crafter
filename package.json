@@ -1,6 +1,6 @@
 {
   "name": "@kud/sim-crafter-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A CLI tool to manage iOS simulators on macOS, simplifying testing and development workflows.",
   "main": "index.js",
   "bin": {
