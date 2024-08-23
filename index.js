@@ -17,15 +17,18 @@ const fetchSimulators = async () => {
   return JSON.parse(stdout).devices
 }
 
+const fetchDeviceTypes = async () => {
+  const { stdout } = await $`xcrun simctl list devicetypes --json`
+  return JSON.parse(stdout).devicetypes
+}
+
 const parseRuntimeToVersion = (runtime) => {
   const match = runtime.match(/iOS-(\d+)-(\d+)/)
-
   return match ? `iOS ${match[1]}.${match[2]}` : "Unknown"
 }
 
-const listRemoteSimulators = async () => {
+const listSimulators = async () => {
   const devices = await fetchSimulators()
-
   const sortedRuntimes = Object.keys(devices).sort((a, b) => {
     const versionA = parseRuntimeToVersion(a).match(/iOS (\d+\.\d+)/)
       ? parseFloat(parseRuntimeToVersion(a).match(/iOS (\d+\.\d+)/)[1])
@@ -33,7 +36,6 @@ const listRemoteSimulators = async () => {
     const versionB = parseRuntimeToVersion(b).match(/iOS (\d+\.\d+)/)
       ? parseFloat(parseRuntimeToVersion(b).match(/iOS (\d+\.\d+)/)[1])
       : 0
-
     return versionB - versionA
   })
 
@@ -71,58 +73,33 @@ const listRemoteSimulators = async () => {
   }
 }
 
-const listSimulators = async () => {
-  const devices = await fetchSimulators()
+const listRemoteSimulators = async () => {
+  const deviceTypes = await fetchDeviceTypes()
 
-  const sortedRuntimes = Object.keys(devices).sort((a, b) => {
-    const versionA = parseRuntimeToVersion(a).match(/iOS (\d+\.\d+)/)
-      ? parseFloat(parseRuntimeToVersion(a).match(/iOS (\d+\.\d+)/)[1])
-      : 0
-    const versionB = parseRuntimeToVersion(b).match(/iOS (\d+\.\d+)/)
-      ? parseFloat(parseRuntimeToVersion(b).match(/iOS (\d+\.\d+)/)[1])
-      : 0
-
-    return versionB - versionA
-  })
-
-  let totalSimulators = 0
   const table = new Table({
-    head: ["Name", "OS Version", "UDID", "State", "Available"],
-    colAligns: ["left", "left", "left", "left", "left"],
+    head: ["Name", "Identifier", "Min Runtime", "Max Runtime"],
+    colAligns: ["left", "left", "left", "left"],
   })
 
-  sortedRuntimes.forEach((runtime) => {
-    if (devices[runtime].length > 0) {
-      const version = parseRuntimeToVersion(runtime)
-      devices[runtime].forEach((device) => {
-        const availability = device.isAvailable ? "Yes" : "No"
-        table.push([
-          device.name,
-          version,
-          device.udid,
-          device.state,
-          availability,
-        ])
-        totalSimulators++
-      })
-    }
+  deviceTypes.forEach((deviceType) => {
+    table.push([
+      deviceType.name,
+      deviceType.identifier,
+      deviceType.minRuntimeVersionString,
+      deviceType.maxRuntimeVersionString,
+    ])
   })
 
-  if (totalSimulators > 0) {
+  if (deviceTypes.length > 0) {
     console.log(table.toString())
   } else {
-    console.log(
-      chalk.yellow(
-        'No simulators found. Consider creating one using the "create" command.',
-      ),
-    )
+    console.log(chalk.yellow("No remote simulators found."))
   }
 }
 
 const getRuntimes = async () => {
   const { stdout } = await $`xcrun simctl list runtimes --json`
   const runtimes = JSON.parse(stdout).runtimes
-
   return runtimes
 }
 
