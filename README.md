@@ -22,7 +22,7 @@ Make sure you have Node.js installed on your system to use Sim Crafter.
 
 ## Usage
 
-### Listing Simulators
+### Listing Available Simulators
 
 To see all available simulators:
 
