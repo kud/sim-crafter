@@ -27,6 +27,14 @@ Make sure you have Node.js installed on your system to use Sim Crafter.
 To see all available simulators:
 
 ```bash
+sim-crafter list-remote
+```
+
+### Listing Simulators
+
+To see all installed simulators:
+
+```bash
 sim-crafter list
 ```
 
