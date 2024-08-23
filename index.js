@@ -6,6 +6,9 @@ import yargs from "yargs"
 import { hideBin } from "yargs/helpers"
 import { $ } from "zx"
 import Table from "cli-table3"
+import { createRequire } from "module"
+const require = createRequire(import.meta.url)
+const { version, homepage } = require("./package.json")
 
 $.verbose = false
 
@@ -331,30 +334,50 @@ const takeScreenshot = async () => {
 
 const main = async () => {
   yargs(hideBin(process.argv))
+    .usage(
+      chalk.blueBright("Usage: $0 <command> [options]") +
+        "\n\n" +
+        chalk.green("Commands:"),
+    )
     .command(
       "list-remote",
-      "List all available simulators",
+      chalk.cyan("List all available remote simulators"),
       {},
       listRemoteSimulators,
     )
-    .command("list", "List all available simulators", {}, listSimulators)
-    .command("create", "Create a new simulator device", {}, createSimulator)
+    .command(
+      "list",
+      chalk.cyan("List all available local simulators"),
+      {},
+      listSimulators,
+    )
+    .command(
+      "create",
+      chalk.cyan("Create a new simulator device"),
+      {},
+      createSimulator,
+    )
     .command(
       "delete",
-      "Delete an existing simulator device",
+      chalk.cyan("Delete an existing simulator device"),
       {},
       deleteSimulator,
     )
-    .command("boot", "Boot a simulator device", {}, bootSimulator)
+    .command("boot", chalk.cyan("Boot a simulator device"), {}, bootSimulator)
     .command(
       "screenshot",
-      "Take a screenshot of a simulator",
+      chalk.cyan("Take a screenshot of a simulator"),
       {},
       takeScreenshot,
     )
-    .demandCommand(1, "Please specify a command.")
+    .demandCommand(1, chalk.red("Please specify a command."))
+    .help(false)
+    .alias("help", "h")
+    .wrap(null)
+    .epilog(chalk.yellowBright(`For more information, visit ${homepage}`))
+    .version(version)
     .help()
-    .alias("help", "h").argv
+    .parse()
 }
 
 main()
